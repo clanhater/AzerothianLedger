@@ -1,0 +1,7 @@
+## Interface: 30300
+## Title: |cffffe569Azerothian Ledger|r
+## Author: ClanHater
+## Version: 0.1-alpha
+## Notes: Un addon para gestionar tu negocio de crafteo en World of Warcraft.
+
+core.lua
