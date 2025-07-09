@@ -49,22 +49,23 @@ function AL_UpdateRecipeList()
     print("Refrescando lista de recetas (función placeholder).")
 end
 
--- Función para guardar una nueva receta
+-- Función para guardar una nueva receta (VERSIÓN MEJORADA)
 function AL_SaveNewRecipe(recipeName, materials)
+    -- Recortamos espacios en blanco al principio y al final
+    recipeName = recipeName:match("^%s*(.-)%s*$")
+
     if not recipeName or recipeName == "" then
-        print("Error: El nombre de la receta no puede estar vacío.")
+        print("|cffff0000Error:|r El nombre de la receta no puede estar vacío.")
         return
     end
     if not materials or #materials == 0 then
-        print("Error: La receta debe tener al menos un material.")
+        print("|cffff0000Error:|r La receta debe tener al menos un material.")
         return
     end
 
-    -- Usamos el nombre de la receta como clave única
     AzerothianLedgerDB.recipes[recipeName] = materials
     print("|cffffe569Receta guardada:|r " .. recipeName)
-    
-    -- Refrescamos la lista para que aparezca la nueva receta
+
     AL_UpdateRecipeList()
 end
 
