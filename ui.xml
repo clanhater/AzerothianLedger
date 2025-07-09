@@ -1,59 +1,167 @@
-<!-- ui.xml -->
+<!-- ui.xml - Versión Completa tras Fase 3 -->
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
-    <!-- 1. La ventana principal de nuestro addon. Es movible y tiene título y botón de cierre. -->
-    <Frame name="AL_MainFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true">
-        <Size x="450" y="500"/>
-        <Anchors>
-            <Anchor point="CENTER"/>
-        </Anchors>
+    <!-- Plantilla para una línea en nuestra lista de recetas -->
+    <Button name="AL_RecipeListLineTemplate" virtual="true">
+        <Size x="180" y="20"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <FontString name="$parentText" inherits="GameFontNormalSmall" justifyH="LEFT" text="Nombre de la Receta">
+                    <Anchors>
+                        <Anchor point="LEFT" x="5" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD"/>
+    </Button>
+
+    <Frame name="AL_MainFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true" toplevel="true">
+        <Size x="500" y="400"/>
+        <Anchors><Anchor point="CENTER"/></Anchors>
         <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-            <BackgroundInsets>
-                <AbsInset left="11" right="12" top="12" bottom="11"/>
-            </BackgroundInsets>
-            <TileSize>
-                <AbsValue val="32"/>
-            </TileSize>
-            <EdgeSize>
-                <AbsValue val="32"/>
-            </EdgeSize>
+            <BackgroundInsets><AbsInset left="11" right="12" top="12" bottom="11"/></BackgroundInsets>
+            <TileSize><AbsValue val="32"/></TileSize>
+            <EdgeSize><AbsValue val="32"/></EdgeSize>
         </Backdrop>
 
-        <!-- Título de la ventana -->
         <Layers>
             <Layer level="ARTWORK">
                 <FontString name="$parentTitle" inherits="GameFontNormal" text="Azerothian Ledger">
-                    <Anchors>
-                        <Anchor point="TOP" relativeTo="$parent" relativePoint="TOP">
-                            <Offset>
-                                <AbsDimension x="0" y="-14"/>
-                            </Offset>
-                        </Anchor>
-                    </Anchors>
+                    <Anchors><Anchor point="TOP" x="0" y="-14"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormal" text="Mis Recetas">
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-40"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormal" text="Coste de Fabricación">
+                    <Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-250" y="-40"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" text="(Clic Der. para vender)">
+                    <Anchors><Anchor point="TOPLEFT" relativeTo="AL_RecipeListScrollFrame" relativePoint="BOTTOMLEFT" x="0" y="-5"/></Anchors>
                 </FontString>
             </Layer>
         </Layers>
 
         <Frames>
-            <!-- Botón de Cierre -->
             <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
-                <Anchors>
-                    <Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
-                        <Offset>
-                            <AbsDimension x="-6" y="-8"/>
-                        </Offset>
-                    </Anchor>
-                </Anchors>
+                <Anchors><Anchor point="TOPRIGHT" x="-6" y="-8"/></Anchors>
             </Button>
             
-            <!-- Botón para añadir una nueva receta -->
+            <ScrollFrame name="AL_RecipeListScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                <Size x="200" y="280"/>
+                <Anchors><Anchor point="TOPLEFT" x="20" y="-60"/></Anchors>
+                <ScrollChild>
+                    <Frame name="AL_RecipeListScrollChild">
+                        <Size x="180" y="1"/>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+
+            <Frame name="AL_CostDetailsFrame">
+                <Size x="250" y="280"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="AL_RecipeListScrollFrame" relativePoint="RIGHT" x="10" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                         <FontString name="AL_CostDetailsText" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="TOP" text="Selecciona una receta para ver su coste.">
+                             <Size x="240" y="270"/>
+                             <Anchors><Anchor point="TOPLEFT" x="5" y="-5"/></Anchors>
+                         </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            
+            <!-- Botones de acción en la parte inferior -->
             <Button name="AL_AddRecipeButton" inherits="UIPanelButtonTemplate" text="Añadir Receta">
                 <Size x="120" y="25"/>
+                <Anchors><Anchor point="BOTTOMLEFT" x="20" y="20"/></Anchors>
+            </Button>
+            <Button name="AL_AddPurchaseButton" inherits="UIPanelButtonTemplate" text="Registrar Compra">
+                <Size x="120" y="25"/>
+                <Anchors><Anchor point="LEFT" relativeTo="AL_AddRecipeButton" relativePoint="RIGHT" x="5" y="0"/></Anchors>
+            </Button>
+            <Button name="AL_SalesHistoryButton" inherits="UIPanelButtonTemplate" text="Historial Ventas">
+                <Size x="120" y="25"/>
                 <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-15" y="15"/>
+                    <Anchor point="LEFT" relativeTo="AL_AddPurchaseButton" relativePoint="RIGHT" x="5" y="0"/>
                 </Anchors>
             </Button>
         </Frames>
     </Frame>
 
+    <!-- UI para el cronómetro de farmeo -->
+    <Frame name="AL_FarmingTimerFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true">
+        <Size x="150" y="50"/>
+        <Anchors><Anchor point="TOP" x="0" y="-150"/></Anchors>
+        <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+            <EdgeSize val="16"/><TileSize val="16"/>
+            <BackgroundInsets><AbsInset left="5" right="5" top="5" bottom="5"/></BackgroundInsets>
+        </Backdrop>
+        <Layers>
+            <Layer>
+                <FontString name="$parentText" inherits="GameFontNormal" text="00:00:00">
+                    <Anchors><Anchor point="CENTER" x="0" y="8"/></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="$parentStartStopButton" inherits="UIPanelButtonTemplate" text="Iniciar">
+                <Size x="70" y="22"/>
+                <Anchors><Anchor point="BOTTOMLEFT" x="5" y="5"/></Anchors>
+            </Button>
+            <Button name="$parentResetButton" inherits="UIPanelButtonTemplate" text="Reset">
+                <Size x="70" y="22"/>
+                <Anchors><Anchor point="BOTTOMRIGHT" x="-5" y="5"/></Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+
+    <!-- Ventana para el Historial de Ventas -->
+    <Frame name="AL_SalesHistoryFrame" parent="UIParent" hidden="true" movable="true" enableMouse="true" toplevel="true">
+        <Size x="600" y="450"/>
+        <Anchors><Anchor point="CENTER"/></Anchors>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+            <BackgroundInsets><AbsInset left="11" right="12" top="12" bottom="11"/></BackgroundInsets>
+            <TileSize><AbsValue val="32"/></TileSize>
+            <EdgeSize><AbsValue val="32"/></EdgeSize>
+        </Backdrop>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parentTitle" inherits="GameFontNormal" text="Historial de Ventas">
+                    <Anchors><Anchor point="TOP" x="0" y="-14"/></Anchors>
+                </FontString>
+                <!-- Cabeceras de la tabla -->
+                <FontString inherits="GameFontNormalSmall" text="Objeto Vendido">
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-40"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" text="Cliente">
+                    <Anchors><Anchor point="TOPLEFT" x="200" y="-40"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" text="Precio Venta">
+                    <Anchors><Anchor point="TOPLEFT" x="300" y="-40"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" text="Coste">
+                    <Anchors><Anchor point="TOPLEFT" x="400" y="-40"/></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" text="Ganancia">
+                    <Anchors><Anchor point="TOPLEFT" x="500" y="-40"/></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors><Anchor point="TOPRIGHT" x="-6" y="-8"/></Anchors>
+            </Button>
+            <ScrollFrame name="AL_SalesHistoryScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                <Size x="560" y="350"/>
+                <Anchors><Anchor point="TOPLEFT" x="20" y="-60"/></Anchors>
+                <ScrollChild>
+                    <Frame name="AL_SalesHistoryScrollChild">
+                        <Size x="540" y="1"/>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+    </Frame>
 </Ui>
