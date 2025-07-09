@@ -3,5 +3,7 @@
 ## Author: ClanHater
 ## Version: 0.1-alpha
 ## Notes: Un addon para gestionar tu negocio de crafteo en World of Warcraft.
+## SavedVariables: AzerothianLedgerDB
 
+ui.xml
 core.lua
